@@ -2,9 +2,9 @@
 
 # iarduino\_IR
 
-**This is a library for Arduino IDE. It allows to with [IR-reciever](https://iarduino.ru/shop/Sensory-Datchiki/ik-priemnik-trema-modul.html) and [IR-transmitter](https://iarduino.ru/shop/Expansion-payments/ik-peredatchik-trema-modul.html) modules made by iArduino.ru**
+**This is a library for Arduino IDE. It allows to work with [IR-reciever](https://iarduino.ru/shop/Sensory-Datchiki/ik-priemnik-trema-modul.html) and [IR-transmitter](https://iarduino.ru/shop/Expansion-payments/ik-peredatchik-trema-modul.html) modules made by iArduino.ru**
 
-**Данная библиотека для Arduino IDE позволяет управлять модулями [ИК-приёмник](https://iarduino.ru/shop/Sensory-Datchiki/ik-priemnik-trema-modul.html) и [ИК-передатчик](https://iarduino.ru/shop/Expansion-payments/ik-peredatchik-trema-modul.html) от [iArduino.ru](https://iarduino.ru)**
+**Данная библиотека для Arduino IDE позволяет работать с модулями [ИК-приёмник](https://iarduino.ru/shop/Sensory-Datchiki/ik-priemnik-trema-modul.html) и [ИК-передатчик](https://iarduino.ru/shop/Expansion-payments/ik-peredatchik-trema-modul.html) от [iArduino.ru](https://iarduino.ru)**
 
 > Подробнее про установку библиотеки читайте в нашей [инструкции](https://wiki.iarduino.ru/page/Installing_libraries/).
 
@@ -13,8 +13,8 @@
 
 | Модель | Ссылка на магазин |
 |---|---|
-| <p></p> ИК-приёмник <img src="https://wiki.iarduino.ru/img/resources/xxxx/xxxx.svg" width="100px"></img>| https://iarduino.ru/shop/Sensory-Datchiki/ik-priemnik-trema-modul.html |
-| <p></p> ИК-передатчик <img src="https://wiki.iarduino.ru/img/resources/xxxx/xxxx.svg" width="100px"></img>| https://iarduino.ru/shop/Expansion-payments/ik-peredatchik-trema-modul.html |
+| <p>ИК-приёмник</p> <img src="https://wiki.iarduino.ru/img/resources/620/620.svg" width="100px"></img>| https://iarduino.ru/shop/Sensory-Datchiki/ik-priemnik-trema-modul.html |
+| <p>ИК-передатчик</p> <img src="https://wiki.iarduino.ru/img/resources/758/758.svg" width="100px"></img>| https://iarduino.ru/shop/Expansion-payments/ik-peredatchik-trema-modul.html |
 
 
 Библиотека использует второй аппаратный таймер, как для раскодирования данных с ИК-приёмника «в фоновом режиме», так и для формирования несущей частоты ИК-передатчика. Не выводите сигнал ШИМ на 3 или 11 вывод, это помешает корректной работе библиотеки.
