@@ -3,6 +3,7 @@
 #	iarduino_IR
 #	####################################################
 #	ТИПЫ ДАННЫХ:							   (KEYWORD1)
+    iarduino_IR	KEYWORD1
 	iarduino_IR_RX	KEYWORD1
 	iarduino_IR_TX	KEYWORD1
 #	####################################################

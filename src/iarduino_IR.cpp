@@ -369,21 +369,25 @@ void		iarduino_IR_TX::IRTX_func_DELAY(bool i, uint32_t j){
 			j*=50; k+=j; while(micros()<=k){}																												//	переводим мкс/50 в мкс, приращаем время вызова данной функции на время ожидания и ждём пока оно не истечёт
 }
 
-//			установка значений регистров таймера под нужную частоту
-void		iarduino_IR_XX::IRXX_func_TIMER2_SETREG(uint32_t i){i*=1000; uint16_t j; uint8_t k;
-			if(F_CPU/255/  1<i){j=   1; k=1;}else																											//	определяем значение предделителя j
-			if(F_CPU/255/  8<i){j=   8; k=2;}else																											//	и значение битов регистра TCCR2B: CS22-CS20 = k
-			if(F_CPU/255/ 32<i){j=  32; k=3;}else
-			if(F_CPU/255/ 64<i){j=  64; k=4;}else
-			if(F_CPU/255/128<i){j= 128; k=5;}else
-			if(F_CPU/255/256<i){j= 256; k=6;}else
-			                   {j=1024; k=7;}
-			TCCR2A	= 0<<COM2A1	| 0<<COM2A0	| 0<<COM2B1	| 0<<COM2B0	| 1<<WGM21	| 0<<WGM20;																	//	биты COM2... = «0» (каналы A и B таймера отключены), биты WGM21 и WGM20 = «10» (таймер 2 в режиме CTC)
-			TCCR2B	= 0<<FOC2A	| 0<<FOC2B	| 0<<WGM22	| k;																								//	биты FOC2... = «0» (без принудительной установки результата сравнения), бит WGM22 = «0» (таймер 2 в режиме CTC), биты CS22-CS20 = k (значение предделителя)
-			OCR2A	= (uint8_t)(F_CPU/(j*i))-1;																												//	значение регистра сравнения OCR2A настраивается под частоту переполнения счётного регистра TCNT2=i.  i=F_CPU/(предделитель*(OCR2A+1)) => OCR2A = (F_CPU/(предделитель*i))-1
-			TIMSK2	= 0<<OCIE2B	| 1<<OCIE2A	| 0<<TOIE2;																										//	разрешаем прерывание по совпадению счётного регистра TCNT2 и регистра сравнения OCR2A
-			SREG	= 1<<7;																																	//	устанавливаем флаг глобального разрешения прерываний 
-			delay(1); IRVV.IRRX_pins_READ_DATA=IRVV.IRTX_pins_SEND_DATA=IRVV.IRRX_uint_READ_STATUS=IRVV.IRTX_pins_SEND_STATUS=IRVV.IRRX_flag_CHECK=IRVV.IRRX_flag_KEY_PRESS=IRVV.IRRX_flag_READ_REPEAT=IRVV.IRRX_flag_READ_PULSE=IRVV.IRRX_uint_PACK_LENGTH=IRVV.IRTX_uint_CALL_PAUSE=IRVV.IRRX_uint_PACK_PAUSE=IRVV.IRRX_uint_PACK_INDEX=IRVV.IRRX_uint_PACK_NUM=IRVV.IRRX_uint_PACK_LEN[0]=IRVV.IRRX_uint_PACK_LEN[1]=0;
+//			установка значений регистров таймера под нужную частоту (кГц)
+void		iarduino_IR_XX::IRXX_func_TIMER2_SETREG(uint32_t i){
+			Timer_Begin(i*=1000);																															//	конфигурируем таймер указав частоту в Гц.
+			delay(1);
+			IRVV.IRRX_uint_READ_STATUS	=	0;																												//	состояние приёма пакетов = 0 - нет пакетов
+			IRVV.IRTX_pins_SEND_STATUS	=	0;																												//	состояние передачи несущей частоты (0 - не передаётся / 1 - передаётся)
+			IRVV.IRRX_pins_READ_DATA	=	0;																												//	состояние на выводе к которому подключён ИК приёмник (0/1)
+			IRVV.IRTX_pins_SEND_DATA	=	0;																												//	состояние на выводе к которому подключён светодиод (0/1)
+			IRVV.IRRX_flag_CHECK		=	0;																												//	флаг выполнения функции check (для реализации опции НЕреагирования на повторные пакеты)
+			IRVV.IRRX_flag_KEY_PRESS	=	0;																												//	флаг выполнения функции check (для установки флага key_press доступного пользователю)
+			IRVV.IRRX_flag_READ_REPEAT	=	0;																												//	флаг наличия повторного пакета старше второго (удерживается клавиша на пульте)
+			IRVV.IRRX_flag_READ_PULSE	=	0;																												//	флаг состояния сигнала в данный момент времени (1-PULSE/0-PAUSE)
+			IRVV.IRRX_uint_PACK_PAUSE	=	0;																												//	пауза между 1 и 2 пакетами
+			IRVV.IRTX_uint_CALL_PAUSE	=	0;																												//	пауза между вызовами функции send (в мкс/50)
+			IRVV.IRRX_uint_PACK_LENGTH	=	0;																												//	длинна сигнала или паузы принимаемой в данный момент времени (в мкс/50)
+			IRVV.IRRX_uint_PACK_INDEX	=	0;																												//	индекс в массиве с данными, в который сейчас записывается время
+			IRVV.IRRX_uint_PACK_NUM		=	0;																												//	номер массива в который записывается пакет
+			IRVV.IRRX_uint_PACK_LEN[0]	=	0;																												//	длинна массива с данными 1 пакета
+			IRVV.IRRX_uint_PACK_LEN[1]	=	0;																												//	длинна массива с данными 2 пакета
 }
 
 //			расшифровка строки протокола
@@ -408,8 +412,8 @@ uint8_t		iarduino_IR_XX::IRXX_func_DECODING(const char *i, uint8_t j){
 			return k;
 }
 
-//			запуск по вектору прерывания TIMER2_COMPA_vect - совпадение счётного регистра TCNT2 и регистра сравнения OCR2A
-/* ISR */	ISR(TIMER2_COMPA_vect){
+//			Обработка прерываний таймера																													//
+			Timer_Callback(Timer_Argument){																													//
 			if(IRVV.IRXX_flag_SEND){																														//	Если передаём данные
 				if(IRVV.IRTX_pins_SEND_STATUS){IRVV.IRTX_pins_SEND_DATA=!IRVV.IRTX_pins_SEND_DATA;}else{IRVV.IRTX_pins_SEND_DATA=IRVV.IRTX_flag_SEND_INVERT;}	
 				digitalWrite(IRVV.IRTX_pins_NUM, IRVV.IRTX_pins_SEND_DATA);																					//	устанавливаем состояние IRTX_pins_SEND_DATA, на выводе передатчика IRTX_pins_NUM
