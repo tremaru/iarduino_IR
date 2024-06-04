@@ -1,6 +1,6 @@
 //	Библиотека для работы с ИК-приёмником:   http://iarduino.ru/shop/Sensory-Datchiki/ik-priemnik-trema-modul.html
 //  И (или)    для работы с ИК-передатчиком: http://iarduino.ru/shop/Expansion-payments/ik-peredatchik-trema-modul.html
-//  Версия: 1.0.2
+//  Версия: 1.0.3
 //  Последнюю версию библиотеки Вы можете скачать по ссылке: http://iarduino.ru/file/257.html
 //  Подробное описание функции бибилиотеки доступно по ссылке: http://wiki.iarduino.ru/page/ik-priemnik/
 //  Библиотека является собственностью интернет магазина iarduino.ru и может свободно использоваться и распространяться!
