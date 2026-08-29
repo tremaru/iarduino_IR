@@ -37,7 +37,7 @@ bool		iarduino_IR_RX::check(bool i){
 			do{	if(IRRX_func_DECODE(0)){data=IRRX_uint_DATA; length=IRRX_uint_LENGTH;}else{return false;}													//	информационный пакет
 				if(IRRX_func_DECODE(1)){IRRX_uint_DATA_REPEAT=IRRX_uint_DATA; IRRX_uint_LENGTH_REPEAT=IRRX_uint_LENGTH;}									//	повторный пакет
 //				если протокол не указан пользователем и был определён как NRC, но не прошел проверку, то меняем протокол на IR_BIPHASIC и повторяем раскодирование
-				IRRX_var_J=0; if(IRRX_uint_CODING==IR_NRC){if(!IRRX_flag_SET_PROTOCOL){if(!IRRX_func_CHECK_NRC()){IRRX_var_J=1; IRRX_uint_CODING==IR_BIPHASIC;}}}
+				IRRX_var_J=0; if(IRRX_uint_CODING==IR_NRC){if(!IRRX_flag_SET_PROTOCOL){if(!IRRX_func_CHECK_NRC()){IRRX_var_J=1; IRRX_uint_CODING=IR_BIPHASIC;}}}
 			}	while(IRRX_var_J);
 //			определяем тип повторного пакета, если протокол передачи данных не указан пользователем
 			if(!IRRX_flag_SET_PROTOCOL){
@@ -453,7 +453,7 @@ uint8_t		iarduino_IR_XX::IRXX_func_DECODING(const char *i, uint8_t j){
 						}
 					}else{																																	//	если импульс сменился на паузу, или наоборот
 						IRVV.IRRX_flag_READ_PULSE=IRVV.IRRX_pins_READ_DATA;																					//	указываем что состояние сигнала в данный момент времени равно состоянию IRRX_pins_READ_DATA
-						if (!IRVV.IRRX_uint_PACK_INDEX<68){																									//	если пакет не превышает длину массива
+						if (IRVV.IRRX_uint_PACK_INDEX<68){																									//	если пакет не превышает длину массива
 							IRVV.IRRX_mass_PACK[IRVV.IRRX_uint_PACK_NUM][IRVV.IRRX_uint_PACK_INDEX]=IRVV.IRRX_uint_PACK_LENGTH;								//	записываем длину импульса или паузы в массив
 							IRVV.IRRX_uint_PACK_LENGTH=0;																									//	обнуляем длительность импульса или паузы
 							IRVV.IRRX_uint_PACK_INDEX++;																									//	увеличиваем индекс очередного элемента в массиве
